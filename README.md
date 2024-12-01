@@ -186,30 +186,12 @@ A battery-powered test setup was built to simulate real-world scenarios. The ESP
 ---
 
 
-
 ### Kalman Filter Guide
 
 The Kalman filter is an algorithm that provides estimates of some unknown variables given the measurements observed over time. Below are the key components and variables used in this implementation:
 
 - **n**: Number of **states** in the system.
 - **m**: Number of **measurement values**.
-
-#### Variables and Matrices
-
-- **xc[n]**: Corrected (updated) state vector at time \( k \).
-  - Represents the estimated state after considering the measurement.
-- **xp[n]**: Predicted state vector at time \( k \).
-  - Represents the state prediction based on the previous state and the system model.
-- **A[n][n]**: System dynamics matrix.
-  - Describes how the system evolves from one state to the next without considering the process noise or control input.
-- **H[m][n]**: Measurement matrix.
-  - Maps the true state space into the observed space.
-- **Q[n][n]**: Process noise covariance matrix.
-  - Represents the covariance of the process noise, accounting for uncertainties in the system model.
-- **R[m][m]**: Measurement noise covariance matrix.
-  - Represents the covariance of the measurement noise, accounting for uncertainties in the sensor measurements.
-- **P[n][n]**: Estimate error covariance matrix.
-  - Represents the error covariance in the state estimate.
 
 #### Kalman Filter Equations
 
