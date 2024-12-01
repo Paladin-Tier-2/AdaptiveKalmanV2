@@ -236,46 +236,46 @@ The Kalman filter is an algorithm that provides estimates of some unknown variab
 
 ### 1. Prediction Step:
 - **State Prediction:**  
-  $$
+```math
   \hat{x}_{k|k-1} = A \hat{x}_{k-1|k-1}
-  $$
+```
 - **Covariance Prediction:**  
-  $$
+```math
   P_{k|k-1} = A P_{k-1|k-1} A^T + Q
-  $$
+```
 
 ## 2. Update (Correction) Step:
 - **Kalman Gain Calculation:**  
-  $$
+```math
   K_k = P_{k|k-1} H^T \left( H P_{k|k-1} H^T + R \right)^{-1}
-  $$
+  ```
 - **State Update:**  
-  $$
+```math
   \hat{x}_{k|k} = \hat{x}_{k|k-1} + K_k \left( z_k - H \hat{x}_{k|k-1} \right)
-  $$
+  ```
 - **Covariance Update:**  
-  $$
+```math
   P_{k|k} = \left( I - K_k H \right) P_{k|k-1}
-  $$
+  ```
 
 ## Adaptive Adjustment Equations
 
 - **Innovation (Predicted Residual):**  
-  $$
+```math
   d_k = z_k - H \hat{x}_{k|k-1}
-  $$
+  ```
 - **Residual (Measurement Residual):**  
-  $$
+```math
   \epsilon_k = z_k - H \hat{x}_{k|k}
-  $$
+ ```
 - **Adaptive Update of \( R \):**  
-  $$
+ ```math
   R_k = \alpha R_{k-1} + (1 - \alpha) \left( \epsilon_k \epsilon_k^T + H P_{k|k-1} H^T \right)
-  $$
+  ```
 - **Adaptive Update of \( Q \):**  
-  $$
+  ```math
   Q_k = \alpha Q_{k-1} + (1 - \alpha) \left( K_k d_k d_k^T K_k^T \right)
-  $$
+  ```
 
 ## Parameters
 
