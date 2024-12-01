@@ -213,50 +213,86 @@ The Kalman filter is an algorithm that provides estimates of some unknown variab
 
 #### Kalman Filter Equations
 
-1. **Prediction Step:**
+# Kalman Filter Documentation
 
-   - **State Prediction:**
-     \[ \hat{x}_{k|k-1} = A \hat{x}_{k-1|k-1} \]
-   - **Covariance Prediction:**
-     \[ P_{k|k-1} = A P_{k-1|k-1} A^T + Q \]
+## Variables and Matrices
+- **xc[n]:** Corrected (updated) state vector at time \( k \).  
+  Represents the estimated state after considering the measurement.
+- **xp[n]:** Predicted state vector at time \( k \).  
+  Represents the state prediction based on the previous state and the system model.
+- **A[n][n]:** System dynamics matrix.  
+  Describes how the system evolves from one state to the next without considering the process noise or control input.
+- **H[m][n]:** Measurement matrix.  
+  Maps the true state space into the observed space.
+- **Q[n][n]:** Process noise covariance matrix.  
+  Represents the covariance of the process noise, accounting for uncertainties in the system model.
+- **R[m][m]:** Measurement noise covariance matrix.  
+  Represents the covariance of the measurement noise, accounting for uncertainties in the sensor measurements.
+- **P[n][n]:** Estimate error covariance matrix.  
+  Represents the error covariance in the state estimate.
 
-2. **Update (Correction) Step:**
+## Kalman Filter Equations
 
-   - **Kalman Gain Calculation:**
-     \[ K_k = P_{k|k-1} H^T (H P_{k|k-1} H^T + R)^{-1} \]
-   - **State Update:**
-     \[ \hat{x}_{k|k} = \hat{x}_{k|k-1} + K_k (z_k - H \hat{x}_{k|k-1}) \]
-   - **Covariance Update:**
-     \[ P_{k|k} = (I - K_k H) P_{k|k-1} \]
+### 1. Prediction Step:
+- **State Prediction:**  
+  \[
+  \hat{x}_{k|k-1} = A \hat{x}_{k-1|k-1}
+  \]
+- **Covariance Prediction:**  
+  \[
+  P_{k|k-1} = A P_{k-1|k-1} A^T + Q
+  \]
 
-#### Adaptive Adjustment Equations
+### 2. Update (Correction) Step:
+- **Kalman Gain Calculation:**  
+  \[
+  K_k = P_{k|k-1} H^T \left( H P_{k|k-1} H^T + R \right)^{-1}
+  \]
+- **State Update:**  
+  \[
+  \hat{x}_{k|k} = \hat{x}_{k|k-1} + K_k \left( z_k - H \hat{x}_{k|k-1} \right)
+  \]
+- **Covariance Update:**  
+  \[
+  P_{k|k} = \left( I - K_k H \right) P_{k|k-1}
+  \]
 
-- **Innovation (Predicted Residual):**
-  \[ d_k = z_k - H \hat{x}_{k|k-1} \]
-- **Residual (Measurement Residual):**
-  \[ \epsilon_k = z_k - H \hat{x}_{k|k} \]
+## Adaptive Adjustment Equations
 
-- **Adaptive Update of R:**
-  \[ R_k = \alpha R_{k-1} + (1 - \alpha)(\epsilon_k \epsilon_k^T + H P_{k|k-1} H^T) \]
+- **Innovation (Predicted Residual):**  
+  \[
+  d_k = z_k - H \hat{x}_{k|k-1}
+  \]
+- **Residual (Measurement Residual):**  
+  \[
+  \epsilon_k = z_k - H \hat{x}_{k|k}
+  \]
+- **Adaptive Update of \( R \):**  
+  \[
+  R_k = \alpha R_{k-1} + (1 - \alpha) \left( \epsilon_k \epsilon_k^T + H P_{k|k-1} H^T \right)
+  \]
+- **Adaptive Update of \( Q \):**  
+  \[
+  Q_k = \alpha Q_{k-1} + (1 - \alpha) \left( K_k d_k d_k^T K_k^T \right)
+  \]
 
-- **Adaptive Update of Q:**
-  \[ Q_k = \alpha Q_{k-1} + (1 - \alpha)(K_k d_k d_k^T K_k^T) \]
+## Parameters
 
-#### Parameters
+- **\( \alpha \):** Forgetting factor (\( 0 < \alpha < 1 \)).  
+  Controls the weight given to new measurements versus the existing estimate.
+- **\( K_k \):** Kalman Gain at time \( k \).  
+  Determines how much the predictions are corrected based on the new measurement.
+- **\( z_k \):** Measurement at time \( k \).
 
-- **\( \alpha \)**: Forgetting factor (0 < \( \alpha \) < 1).
-  - Controls the weight given to new measurements versus the existing estimate.
-- **\( K_k \)**: Kalman Gain at time \( k \).
-  - Determines how much the predictions are corrected based on the new measurement.
-- **\( z_k \)**: Measurement at time \( k \).
+## Implementation Notes
 
-### Implementation Notes
-
-- In this project, we are using a **first-order system**, so \( n = m = 1 \).
+In this project:
+- We use a first-order system, so \( n = m = 1 \).
 - The state vector \( x \) represents the distance measured by the ultrasonic sensor.
-- The system dynamics matrix \( A \) is set to **1**, assuming a constant system without any control input.
-- The measurement matrix \( H \) is also set to **1**, directly mapping the state to the measurement.
+- The system dynamics matrix \( A \) is set to 1, assuming a constant system without any control input.
+- The measurement matrix \( H \) is also set to 1, directly mapping the state to the measurement.
 - The process and measurement noise covariances \( Q \) and \( R \) are initialized with small positive values and are updated adaptively.
+
 
 ### Code Snippet for Variable Initialization
 
