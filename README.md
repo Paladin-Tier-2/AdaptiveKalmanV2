@@ -330,6 +330,7 @@ P[0][0] = 1.0f;       // Initial estimate error covariance
 - **Hotspot Connection:** When testing, ensure your laptop's hotspot is active and the ESP32 is configured to connect to it.
 - **Serial Monitoring:** Use a serial monitor to observe the ESP32's status messages.
 - **Data Synchronization:** Starting the server after the ESP32 is connected prevents data loss and ensures all measurements are logged.
+- **5V** If you look at the schematic of the ESP32, you can see if ESP32 is powered by a 5V source through the USB, then the $`V_in`$ is directly connected to the USB port through a diode, th
 
 
 ---
