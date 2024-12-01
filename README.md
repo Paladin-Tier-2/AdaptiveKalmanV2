@@ -1,7 +1,7 @@
 
 # Adaptive Kalman Filter for Ultrasonic Sensor with ESP32
 
-## 📜 Project Description
+## 📜 Description
 
 This repository contains an implementation of an **Adaptive Kalman Filter** for smoothing sensor readings from an **HC-SR04 Ultrasonic Sensor**. The system uses an **ESP32 microcontroller** and dynamically adjusts the Kalman filter's noise covariance matrices \( R \) and \( Q \) based on innovations and residuals, inspired by the paper:
 
