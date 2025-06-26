@@ -117,17 +117,24 @@ float updateR(float currentR, float residual, float alpha, float H,float P) {
 
   // Kalman Filter
   float *predict = m_kf.predict();
-  
-  float innovation = distance - *predict; // python paper call it residual
+
+  float innovation = distance - *predict; // Predicted residual
   float measurement[measureNum];
-  float K = (predict[0])*(H[0][0])* pow( (H[0][0]*(predict[0])*(H[0][0])+R[0][0]),-1 );
-  measurement[0] = float(distance); 
+
+  // Compute predicted covariance (1x1 case)
+  float P_prior = A[0][0] * P[0][0] * A[0][0] + Q[0][0];
+
+  // Kalman gain using predicted covariance
+  float denom = (H[0][0] * P_prior * H[0][0]) + R[0][0];
+  float K = (denom != 0.0f) ? (P_prior * H[0][0] / denom) : 0.0f;
+
+  measurement[0] = float(distance);
   float *correct = m_kf.correct(measurement);
   float estimated_value = correct[0];
 
   float residual = measurement[0] - estimated_value; // Calculate residual
 
-    R[0][0] = updateR(R[0][0], residual,ALPHA,H[0][0],P[0][0]); // Update R adaptively
+    R[0][0] = updateR(R[0][0], residual, ALPHA, H[0][0], P_prior); // Update R adaptively
     Q[0][0] = updateQ(Q[0][0], innovation,ALPHA,K); // Update Q adaptively
     m_kf.changeR(&R[0][0]);
     m_kf.changeQ(&Q[0][0]);
