@@ -50,7 +50,7 @@ float updateR(float currentR, float residual, float alpha, float H,float P) {
     static float residualSum = 0.0;   
 
     // Update sum of residuals
-    residualSum  = (residual * residual); // Sum of squared residuals
+    residualSum  = (residual * residual);
 
     // Calculate new R using a forgetting factor
     float newR = alpha * currentR + (1 - alpha) * (residualSum + H*P*H );
@@ -68,8 +68,8 @@ float updateR(float currentR, float residual, float alpha, float H,float P) {
           Serial.println("Connecting to WiFi..");
       }
       
-    pinMode(trigPin, OUTPUT); // Sets the trigPin as an OUTPUT
-    pinMode(echoPin, INPUT);  // Sets the echoPin as an INPUT
+    pinMode(trigPin, OUTPUT);
+    pinMode(echoPin, INPUT);  
 
     m_kf.init(stateNum, measureNum, &A[0][0], &P[0][0], &Q[0][0], &H[0][0], &R[0][0], &xp[0], &xc[0]);
     m_kf.zeros();
@@ -87,7 +87,7 @@ float updateR(float currentR, float residual, float alpha, float H,float P) {
     digitalWrite(trigPin, LOW);
     delayMicroseconds(2);
 
-    // Set the trigPin HIGH (ACTIVE) for 10 microseconds
+    
     digitalWrite(trigPin, HIGH);
     delayMicroseconds(10);
     digitalWrite(trigPin, LOW);
@@ -95,18 +95,15 @@ float updateR(float currentR, float residual, float alpha, float H,float P) {
     // Read the echoPin, return the sound wave travel time in microseconds
     duration = pulseIn(echoPin, HIGH);
 
-    // Calculating the distance
     distance= duration*0.034/2;  // Speed of sound wave divided by 2 (go and return)
 
-      // Check if the distance is over 4 meters
     if (distance > MAXDISTANCE) {
-      distance = previousDistance; // Use the last valid distance if the current is over 4m
+      distance = previousDistance; // Use the last valid distance
     } 
     else {
-      previousDistance = distance; // Update the last valid distance
+      previousDistance = distance;
     }
         
-  // Print the distance on
     Serial.print( "Distance[cm]:");
     Serial.println(distance);
     delay(60);
@@ -144,7 +141,6 @@ float updateR(float currentR, float residual, float alpha, float H,float P) {
       // Send HTTP POST request
       int httpResponseCode = http.POST(httpRequestData);
       
-      // Print HTTP response code to Serial Monitor
       Serial.print("HTTP Response code: ");
       Serial.println(httpResponseCode);
       
